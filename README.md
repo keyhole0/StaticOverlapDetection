@@ -1,0 +1,2 @@
+# StaticOverlapDetection
+静的オブジェクト画像上での重なり判定に関する調査プロジェクト
