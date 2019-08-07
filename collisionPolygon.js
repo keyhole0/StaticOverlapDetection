@@ -81,7 +81,7 @@ function main(){
     for(let i=0; i<objectNum; ++i){
         let x = Math.random() * canvas.width;
         let y = Math.random() * canvas.height;
-        let r = Math.random() * 20 + 5;
+        let r = Math.random() * 30 + 5;
         let a = Math.random() * 360;
         stars.push(new Star(x, y, r, a));
     }
