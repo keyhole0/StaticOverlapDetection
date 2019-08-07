@@ -72,7 +72,7 @@ class Canvas{
 
 function main(){
 
-    const startTime = Date.now();
+    const startTime = performance.now();
     let objectNum = 1000;
 
     let canvas = new Canvas('cv');
@@ -81,7 +81,7 @@ function main(){
     for(let i=0; i<objectNum; ++i){
         let x = Math.random() * canvas.width;
         let y = Math.random() * canvas.height;
-        let r = Math.random() * 30 + 5;
+        let r = Math.random() * 20 + 5;
         let a = Math.random() * 360;
         stars.push(new Star(x, y, r, a));
     }
@@ -96,9 +96,10 @@ function main(){
     
     canvas.hitImageData(stars);
 
-    const endTime = Date.now();
+    const endTime = performance.now();
+    let performanceTime = Math.round((endTime - startTime)*1000)/1000
     let resultp = document.getElementById('result');
-    resultp.innerHTML = 'オブジェクト数：' + objectNum + '、時間：' + (endTime-startTime) + 'ミリ秒'
+    resultp.innerHTML = 'オブジェクト数：' + objectNum + '、時間：' + performanceTime + 'ミリ秒'
 }
 
 main();
