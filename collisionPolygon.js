@@ -11,6 +11,14 @@ class Vector{
         return Math.atan2(this.y, this.x);
     }
 }
+class Rect{
+    constructor(t,b,l,r){
+        this.t = t;
+        this.b = b;
+        this.l = l;
+        this.r = r;
+    }
+}
 
 class Star{
     constructor(x, y, r, ang){
@@ -28,9 +36,21 @@ class Star{
         }
         this.imagedata = null;
         this.isHit = false;
+        this.rect = this.createRect();
     }
     setImageData(imagedata){
         this.imagedata = imagedata;
+    }
+    createRect(){
+        let v = this.points[0];
+        let r = new Rect(v.y, v.y, v.x, v.x);
+        for(let i=1; i<this.points.length; ++i){
+            r.t = Math.min(r.t, this.points[i].y);
+            r.b = Math.max(r.b, this.points[i].y);
+            r.l = Math.min(r.l, this.points[i].x);
+            r.r = Math.max(r.r, this.points[i].x);
+        }
+        return r;
     }
 }
 
@@ -147,10 +167,19 @@ function hitPolygon(poly1, poly2){
     return false;
 }
 
+function hitRect(rect1, rect2){
+    return (
+           rect1.t <= rect2.b
+        && rect1.b >= rect2.t
+        && rect1.l <= rect2.r
+        && rect1.r >= rect2.l
+    );
+}
+
 function main(){
 
     const startTime = performance.now();
-    let objectNum = 1000;
+    let objectNum = 500;
 
     let canvas = new Canvas('cv');
 
@@ -172,7 +201,8 @@ function main(){
     //総当り
     for(let i=0; i<stars.length; ++i){
         for(let j=i+1; j<stars.length; ++j){
-            if(hitPolygon(stars[i].points, stars[j].points)){
+            if( hitRect(stars[i].rect, stars[j].rect) && 
+                hitPolygon(stars[i].points, stars[j].points)){
                 stars[i].isHit = true;
                 stars[j].isHit = true;
             }
