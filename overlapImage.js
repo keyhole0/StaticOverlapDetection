@@ -57,10 +57,6 @@ class Canvas{
         this.ctx.clearRect(0, 0, this.width, this.height);
         this.ctx.restore();
         this.ctx.fillStyle = 'rgba(0, 0, 0, 1)';
-        console.log(this.duplicateImage.data[0]);
-        console.log(this.duplicateImage.data[1]);
-        console.log(this.duplicateImage.data[2]);
-        console.log(this.duplicateImage.data[3]);
     }
     hitImageData(stars){
         let hitimage = this.ctx.getImageData(0, 0, this.width, this.height);
