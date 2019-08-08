@@ -97,18 +97,28 @@ function clossLine(ax, ay, bx, by, cx, cy, dx, dy){
 
 //点の内判定
 function pointInPolygon(point, polygon){
-    let extend = new Vector(point.x, 10000); //y軸方向に伸ばす（値は判定に影響の無い範囲で適当に決める）
-    let cnt = 0;
+    let sumAngle = 0;
     for(let i=0; i<polygon.length; ++i){
         let vs1 = polygon[i];
         let ve1 = polygon[(i+1)%polygon.length];
-        if(clossLine(vs1.x, vs1.y, ve1.x, ve1.y, point.x, point.y, extend.x, extend.y)){
-            cnt += 1;
-        }
+        sumAngle += threePointAngle(vs1, point, ve1);
     }
-    //ポリゴンの頂点と交差しているとき、２つの辺と交差している扱いとなってしまっているため、正しく判定できていない。
-    //点から一方向に伸ばした線分とポリゴンが交差している数が奇数ならポリゴンの内側になる
-    return cnt % 2 == 1;
+    //合計絶対値が360°だったら内側、0°だったら外側なので誤差を考慮して少し大きい値で区切る。
+    return Math.abs(sumAngle) > 1;
+}
+
+//3点の内角を計算（向きあり）
+function threePointAngle(p1, p2, p3){
+    let vec1 = p1.sub(p2);
+    let vec2 = p3.sub(p2);
+    let angle = vec2.angle() - vec1.angle();
+    if(angle > Math.PI){
+        angle -= Math.PI * 2;
+    }
+    if(angle <= -Math.PI){
+        angle += Math.PI * 2;
+    }
+    return angle;
 }
 
 //ポリゴン同士の当たり判定
@@ -127,10 +137,10 @@ function hitPolygon(poly1, poly2){
     }
     
     //点の内外判定（辺の交差に引っかからないパターンは一方がもう一方を完全に内包しているパターンしか無いため、一つの点について判定すれば十分
-    if(pointInPolygon(poly1[1], poly2)){
+    if(pointInPolygon(poly1[0], poly2)){
         return true;
     }
-    if(pointInPolygon(poly2[1], poly1)){
+    if(pointInPolygon(poly2[0], poly1)){
         return true;
     }
 
@@ -140,7 +150,7 @@ function hitPolygon(poly1, poly2){
 function main(){
 
     const startTime = performance.now();
-    let objectNum = 0;
+    let objectNum = 1000;
 
     let canvas = new Canvas('cv');
 
@@ -154,8 +164,8 @@ function main(){
     }
 
     //以下は辺が交差しないがヒットしているサンプルのオブジェクト
-    stars.push(new Star(350, 250, 50, -90));
-    stars.push(new Star(350, 250, 10, -90));
+    //stars.push(new Star(350, 250, 50, -90));
+    //stars.push(new Star(350, 250, 10, -90));
     //stars.push(new Star(550, 250, 10, -90));
     //stars.push(new Star(550, 250, 25, -90));
 
