@@ -198,7 +198,7 @@ class Collision{
     }
 }
 
-function main(objectNum){
+function mainOverlap(objectNum){
     let canvas = new Canvas('cv');
     let stars = [];
 
@@ -217,11 +217,11 @@ function main(objectNum){
     }
 }
 
-function checkPerformance(){
+function main(){
     const startTime = performance.now();
 
     let objectNum = 500;
-    main(objectNum);
+    mainOverlap(objectNum);
 
     const endTime = performance.now();
     let performanceTime = Math.round((endTime - startTime)*1000)/1000
@@ -229,4 +229,4 @@ function checkPerformance(){
     resultp.innerHTML = 'オブジェクト数：' + objectNum + '、時間：' + performanceTime + 'ミリ秒'
 }
 
-checkPerformance();
+main();
